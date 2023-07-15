@@ -35,10 +35,6 @@ namespace PaymentAPI.Data.Mappings
                 .IsRequired()
                 .HasColumnName("Doc")
                 .HasColumnType("VARCHAR");
-
-            builder.HasOne(x => x.Sender)
-               .WithMany(x => x.Payments);
-
         }
     }
 }

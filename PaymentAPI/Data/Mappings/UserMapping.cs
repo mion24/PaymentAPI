@@ -38,10 +38,6 @@ namespace PaymentAPI.Data.Mappings
             builder.Property(x => x.PhoneNumber)
                 .IsRequired(false)
                 .HasColumnName("PhoneNumber");
-
-            builder.HasOne(x => x.Account)
-                .WithOne()
-                .HasForeignKey<Account>(x => x.AccountOwnerId);
         }
     }
 }

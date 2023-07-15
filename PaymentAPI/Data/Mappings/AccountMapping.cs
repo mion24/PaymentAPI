@@ -18,6 +18,7 @@ namespace PaymentAPI.Data.Mappings
 
             builder.Property(x => x.Balance)
                 .HasColumnName("Balance")
+                .HasColumnType("Float")
                 .IsRequired()
                 .HasDefaultValue(0);
 

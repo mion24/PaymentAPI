@@ -18,8 +18,8 @@ namespace PaymentAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         {
-            modelBuilder.ApplyConfiguration(new AccountMapping());
-            modelBuilder.ApplyConfiguration(new TransactionMapping());
+            //modelBuilder.ApplyConfiguration(new AccountMapping());
+            //modelBuilder.ApplyConfiguration(new TransactionMapping());
             modelBuilder.ApplyConfiguration(new UserMapping());
         }
     }

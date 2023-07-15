@@ -33,29 +33,18 @@ namespace PaymentAPI.Migrations
                     b.Property<int>("AccountOwnerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AccountOwnerId1")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Balance")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(0m)
-                        .HasColumnName("Balance");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreatedAt")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountOwnerId")
                         .IsUnique();
 
-                    b.HasIndex("AccountOwnerId1");
-
-                    b.ToTable("Account", (string)null);
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("PaymentAPI.Models.Transaction", b =>
@@ -68,29 +57,25 @@ namespace PaymentAPI.Migrations
 
                     b.Property<string>("Doc")
                         .IsRequired()
-                        .HasColumnType("VARCHAR")
-                        .HasColumnName("Doc");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("DocValue")
-                        .HasColumnType("DECIMAL")
-                        .HasColumnName("DocValue");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("IdReceiver")
-                        .HasColumnType("Int")
-                        .HasColumnName("IdReceiver");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("MovDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SenderId")
-                        .HasColumnType("Int")
-                        .HasColumnName("SenderId");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Transaction", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("PaymentAPI.Models.User", b =>
@@ -130,15 +115,9 @@ namespace PaymentAPI.Migrations
 
             modelBuilder.Entity("PaymentAPI.Models.Account", b =>
                 {
-                    b.HasOne("PaymentAPI.Models.User", null)
+                    b.HasOne("PaymentAPI.Models.User", "AccountOwner")
                         .WithOne("Account")
                         .HasForeignKey("PaymentAPI.Models.Account", "AccountOwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PaymentAPI.Models.User", "AccountOwner")
-                        .WithMany()
-                        .HasForeignKey("AccountOwnerId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
