@@ -12,8 +12,8 @@ using PaymentAPI.Data;
 namespace PaymentAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230714114254_UserD")]
-    partial class UserD
+    [Migration("20230717185213_v1m")]
+    partial class v1m
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,30 @@ namespace PaymentAPI.Migrations
                         .IsUnique();
 
                     b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("PaymentAPI.Models.Auth", b =>
+                {
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("ExpirationDate");
+
+                    b.Property<string>("JwtToken")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR")
+                        .HasColumnName("JwtToken");
+
+                    b.Property<DateTime>("LastAcessed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME")
+                        .HasDefaultValue(new DateTime(2023, 7, 17, 18, 52, 13, 857, DateTimeKind.Utc).AddTicks(1475))
+                        .HasColumnName("LastAcessed");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INT")
+                        .HasColumnName("UserId");
+
+                    b.ToTable("Autenticacao", (string)null);
                 });
 
             modelBuilder.Entity("PaymentAPI.Models.Transaction", b =>
@@ -113,7 +137,7 @@ namespace PaymentAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("PaymentAPI.Models.Account", b =>

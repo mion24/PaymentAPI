@@ -37,7 +37,7 @@ app.Run();
 void ConfigureServices(WebApplicationBuilder builder)
 {
     var connectionString = builder.Configuration.GetConnectionString("FirmaCnn");
-    builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+    builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString).UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole())).LogTo(Console.WriteLine).EnableSensitiveDataLogging());
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddControllers();
@@ -57,7 +57,9 @@ void ConfigureAuth(WebApplicationBuilder builder)
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
-            ValidateAudience = false
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
         };
     });
 }

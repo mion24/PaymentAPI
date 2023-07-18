@@ -8,9 +8,7 @@ namespace PaymentAPI.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Account> builder)
         {
-            builder.ToTable("Account");
-
-            builder.HasKey(x => x.Id);
+            builder.ToTable("Contas");
 
             builder.Property(x => x.Id)
                 .ValueGeneratedOnAdd()

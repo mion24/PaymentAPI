@@ -9,6 +9,5 @@
         public string PhoneNumber { get; set; }
         public Account Account { get; set; } = null!;
         public IEnumerable<Transaction> Payments { get; set; }
-
     }
 }

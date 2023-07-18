@@ -9,7 +9,7 @@ namespace PaymentAPI.Data.Mappings
         public void Configure(EntityTypeBuilder<User> builder)
         {
             //tabela
-            builder.ToTable("User");
+            builder.ToTable("Usuarios");
 
             builder.HasKey(x => x.Id);
 

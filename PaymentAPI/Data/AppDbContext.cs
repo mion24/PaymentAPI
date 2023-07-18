@@ -22,5 +22,11 @@ namespace PaymentAPI.Data
             //modelBuilder.ApplyConfiguration(new TransactionMapping());
             modelBuilder.ApplyConfiguration(new UserMapping());
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLoggerFactory(loggerFactory);
+            base.OnConfiguring(optionsBuilder);
+        }
+        ILoggerFactory loggerFactory = new LoggerFactory();
     }
 }

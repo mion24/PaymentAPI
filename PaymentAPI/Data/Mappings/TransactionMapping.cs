@@ -8,7 +8,7 @@ namespace PaymentAPI.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Transaction> builder)
         {
-            builder.ToTable("Transaction");
+            builder.ToTable("Transacoes");
 
             builder.HasKey(t => t.Id);
 

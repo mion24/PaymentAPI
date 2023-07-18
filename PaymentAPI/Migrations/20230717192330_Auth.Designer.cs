@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PaymentAPI.Data;
 
@@ -11,9 +12,11 @@ using PaymentAPI.Data;
 namespace PaymentAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230717192330_Auth")]
+    partial class Auth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,6 +50,39 @@ namespace PaymentAPI.Migrations
                     b.ToTable("Accounts");
                 });
 
+            modelBuilder.Entity("PaymentAPI.Models.Auth", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("ExpirationDate");
+
+                    b.Property<string>("JwtToken")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR")
+                        .HasColumnName("JwtToken");
+
+                    b.Property<DateTime>("LastAcessed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME")
+                        .HasDefaultValue(new DateTime(2023, 7, 17, 19, 23, 30, 85, DateTimeKind.Utc).AddTicks(6201))
+                        .HasColumnName("LastAcessed");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INT")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Autenticacao", (string)null);
+                });
+
             modelBuilder.Entity("PaymentAPI.Models.Transaction", b =>
                 {
                     b.Property<int>("Id")
@@ -71,12 +107,9 @@ namespace PaymentAPI.Migrations
                     b.Property<int>("SenderId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Payments");
                 });
@@ -129,9 +162,13 @@ namespace PaymentAPI.Migrations
 
             modelBuilder.Entity("PaymentAPI.Models.Transaction", b =>
                 {
-                    b.HasOne("PaymentAPI.Models.User", null)
+                    b.HasOne("PaymentAPI.Models.User", "Sender")
                         .WithMany("Payments")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("PaymentAPI.Models.User", b =>

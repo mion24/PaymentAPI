@@ -6,13 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PaymentAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class UserD : Migration
+    public partial class v1m : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Autenticacao",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "INT", nullable: false),
+                    JwtToken = table.Column<string>(type: "VARCHAR", nullable: false),
+                    ExpirationDate = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    LastAcessed = table.Column<DateTime>(type: "DATETIME", nullable: false, defaultValue: new DateTime(2023, 7, 17, 18, 52, 13, 857, DateTimeKind.Utc).AddTicks(1475))
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Usuarios",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -24,7 +37,7 @@ namespace PaymentAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,9 +54,9 @@ namespace PaymentAPI.Migrations
                 {
                     table.PrimaryKey("PK_Accounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Accounts_User_AccountOwnerId",
+                        name: "FK_Accounts_Usuarios_AccountOwnerId",
                         column: x => x.AccountOwnerId,
-                        principalTable: "User",
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -64,9 +77,9 @@ namespace PaymentAPI.Migrations
                 {
                     table.PrimaryKey("PK_Payments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payments_User_SenderId",
+                        name: "FK_Payments_Usuarios_SenderId",
                         column: x => x.SenderId,
-                        principalTable: "User",
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -90,10 +103,13 @@ namespace PaymentAPI.Migrations
                 name: "Accounts");
 
             migrationBuilder.DropTable(
+                name: "Autenticacao");
+
+            migrationBuilder.DropTable(
                 name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Usuarios");
         }
     }
 }
