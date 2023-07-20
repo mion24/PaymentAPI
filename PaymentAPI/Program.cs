@@ -36,7 +36,7 @@ app.Run();
 
 void ConfigureServices(WebApplicationBuilder builder)
 {
-    var connectionString = builder.Configuration.GetConnectionString("FirmaCnn");
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString).UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole())).LogTo(Console.WriteLine).EnableSensitiveDataLogging());
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace PaymentAPI.ResultViewModel.RegisterViewModel
 {
@@ -9,5 +10,8 @@ namespace PaymentAPI.ResultViewModel.RegisterViewModel
         [EmailAddress(ErrorMessage ="Email digitado invalido.")]
         [Required(ErrorMessage ="o Email é um atributo obrigatório.")]
         public string Email { get; set; }
+        [Required(ErrorMessage ="A senha é um atributo obrigatorio.")]
+        [PasswordPropertyText]
+        public string Password { get; set; }
     }
 }

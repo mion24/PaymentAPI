@@ -24,7 +24,7 @@ namespace PaymentAPI.Controllers
 
             var user = new User { UserName = model.Email, Email = model.Email };
 
-            var password = PasswordGenerator.Generate(15, includeSpecialChars: true);
+            var password = model.Password;
 
             user.Password = PasswordHasher.Hash(password);
 
