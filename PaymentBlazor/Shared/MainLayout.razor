@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavManager
+@inject ILocalStorageService LocalStorage
 
 <PageTitle>PaymentBlazor</PageTitle>
 
@@ -9,7 +11,7 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <Button Style="font-weight:bold" @onclick="Logoff">Logoff</Button>
         </div>
 
         <article class="content px-4">
@@ -17,3 +19,12 @@
         </article>
     </main>
 </div>
+
+@code{
+    private async Task Logoff()
+    {
+        await LocalStorage.RemoveItemAsync("jwt");
+
+        NavManager.NavigateTo("/login");
+    }
+}

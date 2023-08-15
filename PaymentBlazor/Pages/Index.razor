@@ -1,0 +1,36 @@
+﻿@page "/index"
+@attribute [Authorize]
+@inject NavigationManager NavManager
+@inject AuthenticationStateProvider AuthStateProvider
+
+
+<table style="width: 100%; text-align: center;" class="table">
+   <thead>
+    <tr>
+        <td style="font-weight:bold; font-size:16px; vertical-align: middle;">Doc</td>
+        <td style="font-weight:bold; font-size:16px; vertical-align: middle;">Value</td>
+        <td style="font-weight:bold; font-size:16px; vertical-align: middle;">Receiver</td>
+    </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var item in TransactionsList)
+            {
+                <tr>
+                    <td>@item.Doc</td>
+                    <td>@item.Value</td>
+                    <td>@item.ReceiverId</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+
+@code {
+    int PageSize = 10;
+    private List<Transactions> TransactionsList = new();
+ }
+

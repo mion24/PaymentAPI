@@ -72,7 +72,7 @@ namespace PaymentAPI.Controllers
 
                 var token = tokenService.GenerateToken(user);
 
-                return Ok(new ResultViewModel<string>(token, null));
+                return Ok(new ResultViewModel<string>(token));
 
             }
             catch (Exception)

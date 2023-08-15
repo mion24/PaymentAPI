@@ -3,10 +3,9 @@
 @layout BaseLayout
 @inject NavigationManager NavManager
 @inject ILocalStorageService LocalStorage
+@attribute [AllowAnonymous]
 
 <EditForm Model="@_user">
-
-
     <div class="wrapper fadeInDown">
         <div id="formContent">
             <!-- Tabs Titles -->
@@ -23,22 +22,16 @@
                 <form>
                     <input type="text" id="login" class="fadeIn second" name="login" placeholder="Email" @bind="@_user.Email">
                     <input type="text" id="password" class="fadeIn third" name="login" placeholder="Senha" @bind="@_user.Password" />
-                    <input type="submit" class="fadeIn fourth" value="Login" @onclick="LoginPost">
+                    <input type="button" class="fadeIn fourth" value="Login" @onclick="LoginPost">
                 </form>
             }
             else
             {
                 <form>
-                    @if (registrationSucess)
-                    {
-                        <Alert Color="AlertColor.Success" Class="fadeIn"> Cadastro efetuado com sucesso ! Você sera redirecionado em instantes. </Alert>
-
-                       
-                    }
                     <input type="text" id="login" class="fadeIn second" name="login" placeholder="Email" @bind="@_user.Email">
                     <input type="text" id="userName" class="fadeIn second" name="userName" placeholder="Nome de Usuario" @bind="@_user.UserName">
                     <input type="text" id="password" class="fadeIn fourth" name="password" placeholder="Senha" @bind="@_user.Password" />
-                    <input type="submit" class="fadeIn fourth" value="Registrar" @onclick="RegisterPost">
+                    <input type="button" class="fadeIn fourth" value="Registrar" @onclick="RegisterPost">
                 </form>
             }
             <!-- Remind Passowrd -->
@@ -52,32 +45,51 @@
 
 @code {
     private User _user = new();
-    private bool registrationSucess;
-    public bool _showLogin;
+    public bool registrationSucess { get; set; }
+    public bool _showLogin = true;
+    public string? token;
 
     private async Task LoginPost()
     {
-        using (HttpClient client = new HttpClient())
+        try
         {
-            string url = "https://localhost:7207/login";
-
-            string jsonContent = JsonConvert.SerializeObject(_user, Formatting.Indented);
-
-            var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await client.PostAsync(url, content);
-
-            if (response.IsSuccessStatusCode)
+            using (HttpClient client = new HttpClient())
             {
-                string responseContent = await response.Content.ReadAsStringAsync();
+                await LocalStorage.ClearAsync();
 
-                await LocalStorage.SetItemAsync("token", responseContent);
-            }
-            else
-            {
+                string url = "https://localhost:7207/login";
 
+                string jsonContent = JsonConvert.SerializeObject(_user, Formatting.Indented);
+
+                var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    token = responseContent;
+
+                    await ArmazenarLocalStorage("jwt", token);
+
+                    NavManager.NavigateTo("/index");
+                }
             }
         }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+
+    private async Task ArmazenarLocalStorage(string key, string content)
+    {
+        await LocalStorage.ClearAsync();
+
+        await LocalStorage.SetItemAsync(key, content);
     }
 
     private async Task RegisterPost()
@@ -97,8 +109,7 @@
                 if (response.IsSuccessStatusCode)
                 {
                     registrationSucess = true;
-
-                    Task.Delay(5000);
+                    await OnInitializedAsync();
                 }
                 else
                 {
@@ -110,7 +121,6 @@
         {
             registrationSucess = false;
         }
-
     }
 }
 
