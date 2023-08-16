@@ -6,7 +6,6 @@
         {
             MovDate = DateTime.Now;
         }
-
         public int Id { get; set; }
         public string Doc { get; set; }
         public int SenderId { get; set; }

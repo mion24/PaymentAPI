@@ -19,7 +19,7 @@ namespace PaymentAPI.Controllers
     {
         [HttpGet("index")]
         [Authorize]
-        public async Task<IActionResult> GetDadosAsync([FromServices] AppDbContext context, [FromServices] TokenService tokenService)
+        public async Task<IActionResult> GetDataAsync([FromServices] AppDbContext context, [FromServices] TokenService tokenService)
         {
             try
             {
@@ -30,12 +30,9 @@ namespace PaymentAPI.Controllers
 
                 var userId = int.Parse(User?.Claims?.FirstOrDefault(x => x.Type == "UserID")?.Value);
 
-                var SendTransactions = from transaction in context.Payments
-                                   join user in context.Users on transaction.SenderId equals user.Id
-                                   where user.Id == userId
-                                   select transaction;
+                List<Transaction> TransactionList = await context.Payments.Where(x => x.SenderId == userId).ToListAsync();
 
-                return Ok(SendTransactions);
+                return Ok(TransactionList);
 
             }
             catch
@@ -59,7 +56,7 @@ namespace PaymentAPI.Controllers
                 {
                     Doc = Guid.NewGuid().ToString(),
                     DocValue = model.DocValue,
-                    //SenderId = int.Parse(User?.Claims?.FirstOrDefault(x => x.Type == "UserID")?.Value),
+                    SenderId = int.Parse(User?.Claims?.FirstOrDefault(x => x.Type == "UserID")?.Value),
                     IdReceiver = model.IdReceiver,
                 };
 

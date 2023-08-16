@@ -1,2 +1,15 @@
 ﻿body {
 }
+
+.container {
+    justify-content: space-between;
+    flex-direction: row;
+    height: 100vh;
+    display: flex;
+}
+
+.button-right {
+    position: absolute;
+    bottom: 5px;
+    right: 0px;
+}
