@@ -19,7 +19,8 @@ namespace PaymentAPI.Services
                 {
                     new Claim("UserEmail",user.Email),
                     new Claim("UserID", user.Id.ToString()),
-                    new Claim("Expires", Expires.ToString())
+                    new Claim("Expires", Expires.ToString()),
+                    new Claim("UserName", user.UserName.ToString())
                 }),
                 
                 SigningCredentials = new SigningCredentials(

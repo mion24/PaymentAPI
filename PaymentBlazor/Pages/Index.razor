@@ -3,35 +3,45 @@
 @inject NavigationManager NavManager
 @inject AuthenticationStateProvider AuthStateProvider
 
+<AuthorizeView>
+    
+<header>
+    <h1 style="font-family:Courier New, Courier, monospace">
+            Hello @context.User.Claims.FirstOrDefault(x => x.Type == "UserName").Value
+    </h1>
+</header>
 
-<table style="width: 100%; text-align: center;" class="table">
-   <thead>
-    <tr>
-        <td style="font-weight:bold; font-size:16px; vertical-align: middle;">Doc</td>
-        <td style="font-weight:bold; font-size:16px; vertical-align: middle;">Value</td>
-        <td style="font-weight:bold; font-size:16px; vertical-align: middle;">Receiver</td>
-    </tr>
-    </thead>
-    <tbody>
-        @{
-            foreach (var item in TransactionsList)
-            {
+<body>
+        <table style="width: 100%; text-align: center;" class="table parent">
+            <thead>
                 <tr>
-                    <td>@item.Doc</td>
-                    <td>@item.Value</td>
-                    <td>@item.ReceiverId</td>
+                    <td style="font-weight:bold; font-size:16px; vertical-align: middle;">Doc</td>
+                    <td style="font-weight:bold; font-size:16px; vertical-align: middle;">Value</td>
+                    <td style="font-weight:bold; font-size:16px; vertical-align: middle;">Receiver</td>
                 </tr>
-            }
-        }
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in TransactionsList)
+                    {
+                        <tr>
+                            <td>@item.Doc</td>
+                            <td>@item.Value</td>
+                            <td>@item.ReceiverKey</td>
+                            <td><button class="btn btn-delete">Delete</button></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
 
-<div class="container">
-    <Button class="button-right" Style="vertical-align:bottom">New Transaction</Button>
-    @*<Button class="fixed-bottom m-3" Style="vertical-align:bottom">Delete Transaction</Button>*@
+        <div class="d-flex justify-content-between">
+            <Button class="btn btn-primary" @onclick="NewTransaction">New Transaction</Button>
+            <Button class="btn btn-danger" Style="vertical-align:bottom">Delete Transaction</Button>
+        </div>
 
-</div>
-
+</body>
+</AuthorizeView>
 
 
 
@@ -39,5 +49,9 @@
     int PageSize = 10;
     private List<Transactions> TransactionsList = new();
 
- }
+    private async Task NewTransaction()
+    {
+        NavManager.NavigateTo("/new-transaction");
+    }
+}
 
